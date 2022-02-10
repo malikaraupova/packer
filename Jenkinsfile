@@ -1,13 +1,16 @@
 if( env.BRANCH_NAME ==~ "dev.*" ){
     // Dev
+    println("Build in Dev")
     aws_region_var = "us-east-1"
 }
 else if( env.BRANCH_NAME == "qa" ){
     // QA
+    println("Build in QA")
     aws_region_var = "us-east-2"
 }
 else if( env.BRANCH_NAME == "master" ){
     // Prod
+    println("Build in Prod")
     aws_region_var = "us-west-2"
 }
 else {
@@ -33,12 +36,6 @@ node('packer'){
                 sh """
                     packer build apache.json
                 """
-                
-                build job: 'Terraform-EC2', parameters: [
-                    string(name: 'environment', value: "${params.environment}"),
-                    string(name: 'aminame', value: "${aminame}"),
-                    string(name: 'terraformaction', value: 'apply')
-                ]
             }
         }
     }
